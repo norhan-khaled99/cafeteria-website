@@ -1,0 +1,16 @@
+body{
+   background-image: url('../images/header-bg.jpg');
+   /* background-position: left; */
+   background-repeat: no-repeat;
+background-size: contain;
+}
+#cafe{
+   font-size:100px;
+}
+.wheat{
+   background-color: #F5DEB3;
+}
+.wheat:hover{
+   background-color: #F5DEB3;
+
+}
