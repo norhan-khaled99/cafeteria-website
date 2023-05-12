@@ -1,5 +1,11 @@
 <?php
-session_start();
+include 'includes/DB_class.php';
+require_once('includes/functions.php');
+
+// Create a new PDO instance
+$pdo = DataBase::connect();
+
+// session_start();
 
 // Check if the user is logged in
 if (!isset($_SESSION['user_id'])) {
@@ -17,16 +23,16 @@ $product_id = $_POST['product_id'];
 $quantity = $_POST['quantity'];
 $notes = $_POST['notes'];
 
-// Retrieve the product details from the database
+// // Retrieve the product details from the database
 $product = get_product_by_id($product_id);
-
 // Check if the product exists
 if (!$product) {
     header('Location: index.php');
     exit();
 }
 
-// Create a new item for the shopping cart
+// // Create a new item for the orders
+// want insert into order_items 
 $item = [
     'id' => $product['id'],
     'name' => $product['name'],
@@ -35,7 +41,7 @@ $item = [
     'notes' => $notes,
 ];
 
-// Add the item to the shopping cart
+// // Add the item to the shopping cart
 if (!isset($_SESSION['cart'])) {
     $_SESSION['cart'] = [];
 }
@@ -59,5 +65,5 @@ if ($existingItem !== null) {
 }
 
 // Redirect the user to the index page
-header('Location: index.php');
+header('Location: orders.php');
 exit();

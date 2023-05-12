@@ -13,30 +13,29 @@ if (!is_logged_in()) {
 }
 
 
-
-// Get the product id from the database
+// Get the user id from the database
 $id = (int) $_GET['id'];
-$product = get_product_by_id($id);
+$user = get_user_by_id($id);
 
-if(empty($product)){
+if(empty($user)){
     echo "not exist";
 }else{
     
     echo " exist you can delete";
 }
-$query = "DELETE FROM products WHERE id=$id";
+$query = "DELETE FROM users WHERE id=$id";
 $stmt = $pdo->prepare($query);
 if ($stmt->execute()) {
-    // Redirect to the products page
-    // header('Location: products.php');
+    // Redirect to the users page
+    // header('Location: users.php');
     // exit();
     echo "tmam deleted ya fandm";
 } else {
-    $error_message = 'An error occurred while updating the product. Please try again later.';
+    $error_message = 'An error occurred while deleting the user. Please try again later.';
 }
-// Include the header
+
 ?>
-<h1>delete Product</h1>
+<h1>delete user</h1>
 
 <?php if (isset($error_message)): ?>
 <div class="alert alert-danger"><?php echo $error_message; ?></div>

@@ -55,10 +55,7 @@ function calculate_total_price($items)
 function get_products()
 {
     // Replace with your database credentials
-    // $servername = "localhost";
-    // $username = "root";
-    // $password = "Salama@99";
-    // $dbname = "cafeteria_db";
+   
     $host = 'localhost';
     $username = 'phpuser';
     $password = 'Iti123456';
@@ -136,6 +133,16 @@ function get_product_by_id($id)
     $pdo = DataBase::getPDO();
 
     $query = "SELECT * FROM products WHERE id = :id";
+    $statement = $pdo->prepare($query);
+    $statement->execute(['id' => $id]);
+
+    return $statement->fetch();
+}
+function get_user_by_id($id)
+{
+    $pdo = DataBase::getPDO();
+
+    $query = "SELECT * FROM users WHERE id = :id";
     $statement = $pdo->prepare($query);
     $statement->execute(['id' => $id]);
 

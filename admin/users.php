@@ -1,7 +1,14 @@
 <?php
-require_once('../includes/config.php');
+include('../includes/config.php');
 require_once('../includes/functions.php');
-check_admin();
+// $pdo = new PDO("mysql:host=$host;", $username, $password);
+// $pdo=new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
+
+// var_dump(is_admin());
+if (!is_admin()) {
+    redirect('index.php');
+    // echo "not admin";
+}
 
 // Get all users
 $query = "SELECT * FROM users";
@@ -19,7 +26,6 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </head>
 
 <body>
-    <?php include_once '../includes/header.php'; ?>
 
     <main>
         <h1>Users</h1>
@@ -40,7 +46,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <td><?php echo $user['id']; ?></td>
                 <td><?php echo $user['name']; ?></td>
                 <td><?php echo $user['email']; ?></td>
-                <td><?php echo $user['room']; ?></td>
+                <td><?php echo $user['room_no']; ?></td>
                 <td><?php echo $user['ext']; ?></td>
                 <td>
                     <a href="edit_user.php?id=<?php echo $user['id']; ?>">Edit</a>
