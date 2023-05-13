@@ -1,3 +1,6 @@
+
+
+
 <?php
 include 'includes/DB_class.php';
 require_once('includes/functions.php');
@@ -13,6 +16,33 @@ if (!is_logged_in()) {
 }
 
 include 'nav-user.php';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Check if the form is submitted
+    if (isset($_POST['submit_order'])) {
+        // Retrieve the form values
+        $selectedProduct = isset($_POST['selected_product']) ? $_POST['selected_product'] : '';
+        $quantity = $_POST['quantity'];
+        $roomNo = $_POST['room_no'];
+        $notes = $_POST['notes'];
+        $totalAmount = $_POST['total_amount'];
+
+        // Check if the selected product is not empty
+        if (!empty($selectedProduct)) {
+            // Save the order in the database using the save_order() function
+            save_order($selectedProduct, $quantity, $roomNo, $notes, $totalAmount);
+
+            // Redirect or display a success message
+            redirect('order-success.php');
+            // Alternatively, you can display a success message here
+            // echo "Order placed successfully.";
+        } else {
+            // Handle the case where the selected product is not provided
+            echo "Please select a product before placing the order.";
+        }
+    }
+}
+
 ?>
 
 <div class="container">
@@ -32,7 +62,7 @@ include 'nav-user.php';
                             <div class="col-6">
                                 <h1 class='text-primary'>Order Form</h1>
                                 <div class="container border border-primary w-50 p-3">
-                                    <form action="order.php" method="post">
+                                    <form action="" method="post">
                                         <div class="form-group">
                                             <label for="selected_product">Selected Product:</label>
                                             <input type="text" id="selected_product" class="form-control" readonly>
@@ -123,6 +153,7 @@ include 'nav-user.php';
         }
     }
 </script>
+
 
 <?php
 include 'includes/footer.php';
