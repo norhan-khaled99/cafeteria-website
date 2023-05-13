@@ -1,10 +1,13 @@
 <?php
 
 $host = 'localhost';
-$username = 'phpuser';
-$password = 'Iti123456';
+$username = 'root';
+$password = 'Salama@99';
 $dbname = 'cafeteria_db';
-// global $pdo;
+// $host = 'localhost';
+// $dbname = 'cafeteria_db';
+// $username = 'phpuser';
+// $password = 'Iti123456';
 try {
     // $pdo = new PDO("mysql:host=$host;", $username, $password);
     $pdo=new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
@@ -14,7 +17,7 @@ try {
     $sql = "CREATE DATABASE IF NOT EXISTS $dbname";
     $pdo->exec($sql);
 
-    echo "Database created successfully";
+    // echo "Database created successfully";
 } catch(PDOException $e) {
     echo "Error creating database: " . $e->getMessage();
 }

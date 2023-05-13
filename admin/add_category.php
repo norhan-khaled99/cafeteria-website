@@ -32,6 +32,8 @@ if (isset($_POST['submit'])) {
     }
 }
 ?>
+  <?php include 'nav-admin.php' ?> 
+
 <h1>Add Category</h1>
 <?php
     if (isset($errors)) {

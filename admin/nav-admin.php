@@ -1,42 +1,58 @@
 <?php
-echo "<link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css' rel='stylesheet'
+echo "
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css'>
+<link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css' rel='stylesheet'
 integrity='sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp' crossorigin='anonymous'>
-<script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js'></script>
 <style>
-.nav-item:hover{
-background-color: wheat;
-cursor: pointer;
-}
+    .navbar {
+        background-color: #333;
+    }
+
+    .navbar-brand {
+        color: #fff;
+        font-size: 24px;
+        font-weight: 600;
+    }
+
+    .navbar-nav .nav-link {
+        color: #fff;
+        font-size: 18px;
+    }
+
+    .navbar-nav .nav-link:hover {
+        color: wheat;
+    }
 </style>
 ";
 ?>
-<nav class='navbar navbar-expand-lg'>
-        <div class='w-100 d-flex justify-content-between'>
-            <div class=' d-flex justify-content-between'>
-
-                <div class='collapse navbar-collapse '>
-                    <ul class='navbar-nav '>
-
-                        <li class='nav-item mx-5'>
-                            <a href='./index.php' class='fs-3 ' active>Home</a>
-                        </li>
-                        <li class='nav-item me-5'>
-                            <a href='./products.php' class='fs-3'>products</a>
-                        </li>
-                        <li class='nav-item me-5'>
-                            <a href='./users.php' class='fs-3'>users</a>
-                        </li>
-                        <li class='nav-item me-5'>
-                            <a href='../order.php' class='fs-3'>manual orders</a>
-                        </li>
-                        <li class='nav-item mx-5'>
-                            <a href='' class='fs-3 ' active>checks</a>
-                        </li>
-                        <li class='nav-item mx-5'>
-                            <a href='../logout.php' class='fs-3 ' active>log out</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Admin Dashboard</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="./index.php">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="./products.php">Products</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="./users.php">Users</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="./admin-order.php">Manual Orders</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="">Checks</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../logout.php">Log Out</a>
+                </li>
+            </ul>
         </div>
+    </div>
 </nav>

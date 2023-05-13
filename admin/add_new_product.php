@@ -1,98 +1,121 @@
 <?php
-include_once('../includes/config.php');
-include_once('../includes/functions.php');
-$pdo=new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
+require_once('../includes/config.php');
+require_once('../includes/functions.php');
+$pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
 
-// Check if the user is logged in as admin
-if (!is_logged_in()) {
-    header('Location: ../login.php');
-    exit();
-} elseif (!is_admin()) {
-    header('Location: index.php');
-    exit();
-}
-
-// Get the list of categories for the form
-$categories = get_all_categories();
-
-// **********************************************************************************
 // Check if the form was submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Get the form data
     $name = $_POST['name'];
-    $price = (float) $_POST['price'];
-    $category_id = (int) $_POST['category_id'];
-    $image_url = $_POST['image_url'];
+    $price = $_POST['price'];
+    $category_id = $_POST['category_id'];
 
-    // Check if all fields are filled in
+    // Process the image file
+    $image = $_FILES['image'];
+    $image_name = $image['name'];
+    $image_tmp_name = $image['tmp_name'];
+    $image_error = $image['error'];
 
-    var_dump($name);
-    var_dump($price);
-    // var_dump(empty($category_id));
-    // var_dump(empty($image_url));
-    if (empty($name) || empty($price) || empty($category_id) || empty($image_url)) {
-        $error_message = 'Please fill in all fields';
+    // Validate form data
+    if (empty($name) || empty($price) || empty($category_id)) {
+        $error_message = 'Please fill in all fields.';
+    } elseif ($image_error !== 0) {
+        $error_message = 'An error occurred while uploading the image. Please try again.';
     } else {
-        // insert the product in the database
-        $query = "INSERT INTO products (name, price, category_id,image_url)VALUES (:name, :price, :category_id, :image_url)";
-        $stmt = $pdo->prepare($query);
-        $stmt->bindParam(':name', $name);
-        $stmt->bindParam(':price', $price);
-        $stmt->bindParam(':category_id', $category_id);
-        $stmt->bindParam(':image_url', $image_url);
-
-        if ($stmt->execute()) {
-            // Redirect to the products page
-            header('Location: products.php');
-            exit();
-        } else {
-            $error_message = 'An error occurred while updating the product. Please try again later.';
+        // Create the folder if it doesn't exist
+        $upload_dir = '../product_images/';
+        if (!is_dir($upload_dir)) {
+            mkdir($upload_dir, 0777, true);
         }
 
-       
+        // Generate a unique filename for the image
+        $image_extension = pathinfo($image_name, PATHINFO_EXTENSION);
+        $image_filename = time() . '_' . uniqid() . '.' . $image_extension;
+
+        // Save the image file to the folder
+        $image_path = $upload_dir . $image_filename;
+        if (move_uploaded_file($image_tmp_name, $image_path)) {
+            // Save the product details and image URL in the database
+            $query = "INSERT INTO products (name, image_url, price, category_id) VALUES (:name, :image_url, :price, :category_id)";
+            $stmt = $pdo->prepare($query);
+            $stmt->bindValue(':name', $name);
+            $stmt->bindValue(':image_url', 'localhost/product_images/' . $image_filename);
+            $stmt->bindValue(':price', $price);
+            $stmt->bindValue(':category_id', $category_id);
+
+            if ($stmt->execute()) {
+                // Redirect to the products page
+                header('Location: products.php');
+                exit();
+            } else {
+                $error_message = 'An error occurred while adding the product. Please try again later.';
+            }
+        } else {
+            $error_message = 'An error occurred while uploading the image. Please try again.';
+        }
     }
 }
 
-// Get the product from the database
-// $id = (int) $_GET['id'];
-// $product = get_product($id);
-
-// Include the header
+// Get the categories from the database
+$query = "SELECT * FROM categories";
+$stmt = $pdo->query($query);
+$categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
-<h1>Add Product</h1>
 
-<?php if (isset($error_message)): ?>
-<div class="alert alert-danger"><?php echo $error_message; ?></div>
-<?php endif; ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Product</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
 
-<form method="POST">
-    <div class="form-group">
-        <label for="name">Name:</label>
-        <input type="text" name="name" id="name" class="form-control" >
+        .container {
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="my-4">Add Product</h1>
+
+
+<?php if (isset($error_message)) { ?>
+            <div class="alert alert-danger" role="alert">
+                <?php echo $error_message; ?>
+            </div>
+        <?php } ?>
+
+        <form action="" method="POST" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" class="form-control" id="name" name="name" required>
+            </div>
+            <div class="mb-3">
+                <label for="price" class="form-label">Price</label>
+                <input type="number" step="0.01" class="form-control" id="price" name="price" required>
+            </div>
+            <div class="mb-3">
+                <label for="category" class="form-label">Category</label>
+                <select class="form-control" id="category" name="category_id" required>
+                    <option value="">Select a category</option>
+                    <?php foreach ($categories as $category) { ?>
+                        <option value="<?php echo $category['id']; ?>"><?php echo $category['name']; ?></option>
+                    <?php } ?>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="image" class="form-label">Image</label>
+                <input type="file" class="form-control" id="image" name="image" required accept="image/*">
+            </div>
+            <button type="submit" class="btn btn-primary">Add Product</button>
+        </form>
     </div>
-    <div class="form-group">
-        <label for="price">Price:</label>
-        <input type="number" step="0.01" name="price" id="price" class="form-control" >
-    </div>
-    <div class="form-group">
-        <label for="category_id">Category:</label>
-        <select name="category_id" id="category_id" class="form-control">
-            <?php foreach ($categories as $category): ?>
-                <option value="<?php echo $category['id']; ?>">
-                <?php echo $category['name']; ?></option>
-            <?php echo $category['name']; ?></option>
 
-            </option>
-            <?php endforeach; ?>
-        </select>
-
-<input type="file" name="image_url" id="image_url" accept="image/*">
-
-    </div>
-    <button type="submit" class="btn btn-primary">Add Product</button>
-</form>
-
-<?php
-// Include the footer
-include_once('../includes/footer.php');
-?>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

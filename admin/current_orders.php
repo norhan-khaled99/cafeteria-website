@@ -18,8 +18,8 @@ $stmt = $pdo->query($sql);
 $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Include header
-include_once('../includes/header.php');
 ?>
+  <?php include 'nav-admin.php' ?> 
 
 <div class="container my-5">
     <h2>Current Orders</h2>

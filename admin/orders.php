@@ -15,8 +15,8 @@ $stmt = $pdo->query($query);
 $page_title = 'Orders';
 
 // Include header
-include_once '../includes/header.php';
 ?>
+  <?php include 'nav-admin.php' ?> 
 
 <div class="container">
     <div class="row">

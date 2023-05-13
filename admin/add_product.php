@@ -54,6 +54,7 @@ $product = get_product($id);
 // Include the header
 include_once('../includes/header.php');
 ?>
+  <?php include 'nav-admin.php' ?> 
 
 <h1>Edit Product</h1>
 

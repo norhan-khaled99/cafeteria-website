@@ -1,4 +1,5 @@
 <?php
+
 // include 'config.php';
 require_once('config.php');
 require_once('DB_class.php');
@@ -18,6 +19,24 @@ function is_logged_in()
     return isset($_SESSION['user_id']);
 }
 
+
+function check_session() {
+    // Start or resume the current session
+
+    // Check if the 'user_id' session variable is set
+    if (!isset($_SESSION['user_id'])) {
+        // User is not logged in, redirect to the login page or perform any desired action
+        header('Location: login.php');
+        exit();
+    }
+
+    // Additional session checks or validations can be added here
+
+    // User is logged in and session is valid
+}
+
+
+
 function is_admin()
 {
     // check if the user is logged in and their role is admin
@@ -28,13 +47,17 @@ function is_admin()
     }
 }
 
-function validate_category_form($name) { 
+function validate_category_form($name)
+{
     $errors = array();
-     // Perform validation on the category name 
-     if (empty($name)) { $errors[] = 'Category name is required'; }
-      elseif (strlen($name) > 50) 
-      { $errors[] = 'Category name should not exceed 50 characters'; } 
-      return $errors; }
+    // Perform validation on the category name
+    if (empty($name)) {
+        $errors[] = 'Category name is required';
+    } elseif (strlen($name) > 50) {
+        $errors[] = 'Category name should not exceed 50 characters';
+    }
+    return $errors;
+}
 
 
 
@@ -55,12 +78,17 @@ function calculate_total_price($items)
 function get_products()
 {
     // Replace with your database credentials
-   
+
     $host = 'localhost';
-    $username = 'phpuser';
-    $password = 'Iti123456';
+    $username = 'root';
+    $password = 'Salama@99';
     $dbname = 'cafeteria_db';
-    
+
+    // $host = 'localhost';
+    // $username = 'phpuser';
+    // $password = 'Iti123456';
+    // $dbname = 'cafeteria_db';
+
     try {
         // Create a new PDO instance
         $db = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
@@ -114,6 +142,18 @@ function get_user_orders($userId)
         die("Database error: " . $e->getMessage());
     }
 }
+
+function is_category_exists($category_id)
+{
+    global $pdo;
+    $query = "SELECT id FROM categories WHERE id = :category_id";
+    $stmt = $pdo->prepare($query);
+    $stmt->bindParam(':category_id', $category_id);
+    $stmt->execute();
+    return $stmt->rowCount() > 0;
+}
+
+
 
 // Add more functions for other functionality as needed
 
@@ -170,6 +210,18 @@ function get_orders_by_user($user_id)
 }
 
 
+function get_all_users()
+{
+    $pdo = DataBase::getPDO();
+
+    $query = "
+        SELECT *
+        FROM users
+    ";
+
+    $stmt = $pdo->query($query);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 
 
 // Function to create the necessary tables in the database

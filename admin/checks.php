@@ -33,8 +33,8 @@ $stmt = $pdo->prepare("SELECT * FROM orders WHERE status = 'pending'");
 $stmt->execute();
 
 // Include header and navigation bar
-require_once 'header.php';
 ?>
+  <?php include 'nav-admin.php' ?> 
 
 <div class="container">
     <h1 class="my-4">Checks</h1>

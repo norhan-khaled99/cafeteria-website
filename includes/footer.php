@@ -1,13 +1,35 @@
-<?php
-echo "<link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css' rel='stylesheet'
-        integrity='sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp' crossorigin='anonymous'>
-        <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js'></script>
-        <link rel='stylesheet' href='css/nav-style.css'>
-        ";
-?>
 
-
-
-<div class="wheat">
-    copy rights
+<footer class="bg-dark text-light">
+<div class="container py-4">
+    <div class="row">
+        <div class="col-lg-4">
+            <h5>About Us</h5>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vulputate scelerisque erat, sit amet
+                finibus odio convallis vitae.</p>
+        </div>
+        <div class="col-lg-4">
+            <h5>Contact Us</h5>
+            <p>123 Street, City</p>
+            <p>admin@example.com</p>
+            <p>123-456-7890</p>
+        </div>
+        <div class="col-lg-4">
+            <h5>Follow Us</h5>
+            <ul class="list-inline">
+                <li class="list-inline-item">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                </li>
+                <li class="list-inline-item">
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                </li>
+                <li class="list-inline-item">
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </li>
+            </ul>
+        </div>
+    </div>
 </div>
+<div class="bg-secondary text-center py-2">
+    <p class="mb-0">All rights reserved &copy; 2023</p>
+</div>
+</footer>

@@ -39,6 +39,8 @@
 
     // Display check details
 ?>
+  <?php include 'nav-admin.php' ?> 
+
 <div class="container">
     <h1>Check Details</h1>
     <table class="table">

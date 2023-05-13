@@ -11,18 +11,17 @@ if (!empty($_POST)) {
     $email = $_POST['email'];
     $password = $_POST['password'];
     $user = get_user_by_email($email); // Use the function from functions.php
+
     if ($user && $password == $user['password']) {
         $_SESSION['user_id'] = $user['id'];
 
-        if($user['isAdmin']==1)
-        {
+        if ($user['is_admin'] == 1) {
             $_SESSION['role'] = 'admin';
-            redirect('admin/index.php');
-        }
-        else{
+            header('Location: admin/index.php');
+            exit();
+        } else {
             header('Location: index.php');
             exit();
-
         }
     } else {
         $error = 'Invalid email or password';
@@ -39,7 +38,7 @@ echo "<link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/b
         ";
 ?>
 
-<div class="container" >
+<div class="container">
     <div id='cafe' class='mt-5 text-left  fw-light' style="color:#f9d4a4e3">Cafeteria
         <img style='width: 110px;' src='images/coffee-logo.png' alt='logo'/>
     </div>
@@ -58,11 +57,13 @@ echo "<link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/b
             <input type='password' name='password' class='form-control' required>
 
             <div class='mt-3 text-center'>
-                <button type='submit' class='btn  text-center mb-3 wheat' >Log in</button><br>
+                <button type='submit' class='btn  text-center mb-3 wheat'>Log in</button><br>
                 <a href='reset-password.php?email='style="color:wheat;">Forgot password?</a>
             </div>
         </form>
     </div>
 </div>
 
+<?php
 include 'includes/footer.php';
+?>
