@@ -27,6 +27,9 @@ if (!empty($_POST)) {
         $error = 'Invalid email or password';
     }
 }
+
+
+
 ?>
 
 
@@ -40,7 +43,7 @@ echo "<link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/b
 
 <div class="container">
     <div id='cafe' class='mt-5 text-left  fw-light' style="color:#f9d4a4e3">Cafeteria
-        <img style='width: 110px;' src='images/coffee-logo.png' alt='logo'/>
+        <img style='width: 110px;' src='images/coffee-logo.png' alt='logo' />
     </div>
     <br>
 
@@ -51,19 +54,25 @@ echo "<link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/b
     <div class='container d-flex justify-content-left'>
         <form class='w-50' action='' method='POST'>
             <label for='email' class='form-label'>Email</label>
-            <input type='email' name='email' class='form-control' required>
+            <input type='email' id='email-input' name='email' class='form-control' required>
             <br>
             <label for='password' class='form-label'>Password</label>
             <input type='password' name='password' class='form-control' required>
 
             <div class='mt-3 text-center'>
                 <button type='submit' class='btn  text-center mb-3 wheat'>Log in</button><br>
-                <a href='reset-password.php?email='style="color:wheat;">Forgot password?</a>
+                <a href='reset-password.php' id='forgot-password-link' style="color:wheat;">Forgot password?</a>
             </div>
         </form>
     </div>
 </div>
-
+<script>
+    document.getElementById('forgot-password-link').addEventListener('click', function(event) {
+        event.preventDefault();
+        var email = document.getElementById('email-input').value;
+        window.location.href = 'reset-password.php?email=' + email;
+    });
+</script>
 <?php
 include 'includes/footer.php';
 ?>

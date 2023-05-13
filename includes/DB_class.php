@@ -2,14 +2,20 @@
 include 'config.php';
 class DataBase
 {
-    private static $pdo;
+    public static $pdo;
 
+    public function query($sql, $params = [])
+    {
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($params);
+        return $stmt;
+    }
     public static function connect()
     {
         $host = 'localhost';
-        $dbname = 'cafeteria_db';
+        $dbname = 'cafeteriaWebsiteDB';
         $username = 'root';
-        $password = 'Salama@99';
+        $password = 'pass';
         // $host = 'localhost';
         // $dbname = 'cafeteria_db';
         // $username = 'phpuser';
@@ -108,7 +114,6 @@ class DataBase
     {
         return bin2hex(random_bytes($length));
     }
-
 }
 
 // Establish the database connection

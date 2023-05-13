@@ -2,8 +2,8 @@
 
 $host = 'localhost';
 $username = 'root';
-$password = 'Salama@99';
-$dbname = 'cafeteria_db';
+$password = 'pass';
+$dbname = 'cafeteriaWebsiteDB';
 // $host = 'localhost';
 // $dbname = 'cafeteria_db';
 // $username = 'phpuser';

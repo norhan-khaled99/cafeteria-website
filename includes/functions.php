@@ -6,6 +6,15 @@ require_once('DB_class.php');
 
 session_start();
 
+function save_reset_token($user_id, $token)
+{
+    $db = new DataBase();
+    $db->connect();
+    $stmt = $db->pdo->prepare("UPDATE users SET reset_token = ? WHERE id = ?");
+    $stmt->execute([$token, $user_id]);
+    return $stmt->rowCount() > 0;
+}
+
 // Redirect function
 function redirect($url)
 {
@@ -20,7 +29,8 @@ function is_logged_in()
 }
 
 
-function check_session() {
+function check_session()
+{
     // Start or resume the current session
 
     // Check if the 'user_id' session variable is set
@@ -81,8 +91,8 @@ function get_products()
 
     $host = 'localhost';
     $username = 'root';
-    $password = 'Salama@99';
-    $dbname = 'cafeteria_db';
+    $password = 'pass';
+    $dbname = 'cafeteriaWebsiteDB';
 
     // $host = 'localhost';
     // $username = 'phpuser';
@@ -282,8 +292,8 @@ function cancel_order($orderId)
     // Replace with your database credentials
     $servername = "localhost";
     $username = "root";
-    $password = "Salama@99";
-    $dbname = "cafeteria_db";
+    $password = "pass";
+    $dbname = "cafeteriaWebsiteDB";
 
     try {
         // Create a new PDO instance
