@@ -12,7 +12,7 @@ if (!empty($_POST)) {
     $password = $_POST['password'];
     $user = get_user_by_email($email); // Use the function from functions.php
 
-    if ($user && $password == $user['password']) {
+    if ($user && password_verify($password, $user['password'])) {
         $_SESSION['user_id'] = $user['id'];
 
         if ($user['is_admin'] == 1) {

@@ -1,8 +1,7 @@
 <?php
 
-// include 'config.php';
-require_once('config.php');
-require_once('DB_class.php');
+require_once 'config.php';
+require_once 'DB_class.php';
 
 session_start();
 
@@ -28,38 +27,25 @@ function is_logged_in()
     return isset($_SESSION['user_id']);
 }
 
-
+// Check session and redirect if user is not logged in
 function check_session()
 {
-    // Start or resume the current session
-
-    // Check if the 'user_id' session variable is set
-    if (!isset($_SESSION['user_id'])) {
-        // User is not logged in, redirect to the login page or perform any desired action
-        header('Location: login.php');
-        exit();
+    if (!is_logged_in()) {
+        redirect('login.php');
     }
-
     // Additional session checks or validations can be added here
-
-    // User is logged in and session is valid
 }
 
-
-
+// Check if the user is an admin
 function is_admin()
 {
-    // check if the user is logged in and their role is admin
-    if (is_logged_in() && $_SESSION['role'] == 'admin') {
-        return true;
-    } else {
-        return false;
-    }
+    return is_logged_in() && $_SESSION['role'] === 'admin';
 }
 
+// Validate the category form
 function validate_category_form($name)
 {
-    $errors = array();
+    $errors = [];
     // Perform validation on the category name
     if (empty($name)) {
         $errors[] = 'Category name is required';
@@ -69,10 +55,25 @@ function validate_category_form($name)
     return $errors;
 }
 
-
-
-
-
+function get_checks($pdo)
+{
+    // Prepare the query
+    $query = "SELECT c.id, c.check_date, c.total_price, u.name AS user_name
+              FROM checks c
+              INNER JOIN users u ON c.user_id = u.id";
+    
+    // Prepare the statement
+    $stmt = $pdo->prepare($query);
+    
+    // Execute the query
+    $stmt->execute();
+    
+    // Fetch all the results
+    $checks = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+    // Return the checks
+    return $checks;
+}
 
 // Calculate total price of selected items
 function calculate_total_price($items)
@@ -87,83 +88,38 @@ function calculate_total_price($items)
 // Get all products from the database
 function get_products()
 {
-    // Replace with your database credentials
-
-    $host = 'localhost';
-    $username = 'root';
-    $password = 'pass';
-    $dbname = 'cafeteriaWebsiteDB';
-
-    // $host = 'localhost';
-    // $username = 'phpuser';
-    // $password = 'Iti123456';
-    // $dbname = 'cafeteria_db';
-
-    try {
-        // Create a new PDO instance
-        $db = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
-
-        // Set the PDO error mode to exception
-        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-        // Fetch all products from the database
-        $stmt = $db->query('SELECT * FROM products');
-        $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        return $products;
-    } catch (PDOException $e) {
-        // Handle database connection error
-        die("Database error: " . $e->getMessage());
-    }
+    $pdo = DataBase::getPDO();
+    $stmt = $pdo->query('SELECT * FROM products');
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+
+// Get all categories
 function get_all_categories()
 {
-    global $pdo;
-    $stmt = $pdo->prepare("SELECT * FROM categories ORDER BY name ASC");
-    $stmt->execute();
-    $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    return $categories;
+    $pdo = DataBase::getPDO();
+    $stmt = $pdo->query('SELECT * FROM categories ORDER BY name ASC');
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
-// Get all orders for a specific user
+
+// Get orders for a specific user
 function get_user_orders($userId)
 {
-    // Replace with your database credentials
-    // $servername = "localhost";
-    // $username = "root";
-    // $password = "Salama@99";
-    // $dbname = "cafeteria_db";
-
-    try {
-        // Create a new PDO instance
-        $db = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-
-        // Set the PDO error mode to exception
-        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-        // Fetch all orders for the user from the database
-        $stmt = $db->prepare('SELECT * FROM orders WHERE user_id = :user_id');
-        $stmt->bindParam(':user_id', $userId);
-        $stmt->execute();
-        $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        return $orders;
-    } catch (PDOException $e) {
-        // Handle database connection error
-        die("Database error: " . $e->getMessage());
-    }
+    $pdo = DataBase::getPDO();
+    $stmt = $pdo->prepare('SELECT * FROM orders WHERE user_id = :user_id');
+    $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-function is_category_exists($category_id)
+// Check if a category exists
+function is_category_exists($categoryId)
 {
-    global $pdo;
-    $query = "SELECT id FROM categories WHERE id = :category_id";
-    $stmt = $pdo->prepare($query);
-    $stmt->bindParam(':category_id', $category_id);
+    $pdo = DataBase::getPDO();
+    $stmt = $pdo->prepare('SELECT id FROM categories WHERE id = :category_id');
+    $stmt->bindParam(':category_id', $categoryId, PDO::PARAM_INT);
     $stmt->execute();
     return $stmt->rowCount() > 0;
 }
-
-
 
 // Add more functions for other functionality as needed
 
@@ -171,68 +127,49 @@ function is_category_exists($category_id)
 function get_user_by_email($email)
 {
     $pdo = DataBase::getPDO();
-
-    $query = "SELECT * FROM users WHERE email = :email";
-    $statement = $pdo->prepare($query);
-    $statement->execute(['email' => $email]);
-
-    return $statement->fetch();
+    $stmt = $pdo->prepare('SELECT * FROM users WHERE email = :email');
+    $stmt->bindParam(':email', $email);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
 }
+
+// Get a product by ID
 function get_product_by_id($id)
 {
     $pdo = DataBase::getPDO();
-
-    $query = "SELECT * FROM products WHERE id = :id";
-    $statement = $pdo->prepare($query);
-    $statement->execute(['id' => $id]);
-
-    return $statement->fetch();
+    $stmt = $pdo->prepare('SELECT * FROM products WHERE id = :id');
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
 }
+
+// Get a user by ID
 function get_user_by_id($id)
 {
     $pdo = DataBase::getPDO();
-
-    $query = "SELECT * FROM users WHERE id = :id";
-    $statement = $pdo->prepare($query);
-    $statement->execute(['id' => $id]);
-
-    return $statement->fetch();
+    $stmt = $pdo->prepare('SELECT * FROM users WHERE id = :id');
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
-
-// Function to get orders by user ID
-function get_orders_by_user($user_id)
+// Get orders by user ID
+function get_orders_by_user($userId)
 {
     $pdo = DataBase::getPDO();
-
-    $query = "
-        SELECT *
-        FROM orders
-        WHERE user_id = :user_id
-        ORDER BY order_date DESC
-    ";
-
-    $stmt = $pdo->prepare($query);
-    $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+    $stmt = $pdo->prepare('SELECT * FROM orders WHERE user_id = :user_id ORDER BY order_date DESC');
+    $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
     $stmt->execute();
-
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-
+// Get all users
 function get_all_users()
 {
     $pdo = DataBase::getPDO();
-
-    $query = "
-        SELECT *
-        FROM users
-    ";
-
-    $stmt = $pdo->query($query);
+    $stmt = $pdo->query('SELECT * FROM users');
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
-
 
 // Function to create the necessary tables in the database
 function create_tables()
@@ -284,30 +221,50 @@ function create_tables()
     $pdo->exec($query);
 }
 
+// ...
+
+// Save the order in the database
+function save_order($selectedProduct, $quantity, $roomNo, $notes, $totalAmount)
+{
+    $pdo = DataBase::getPDO();
+
+    // Insert the order into the orders table
+    $stmt = $pdo->prepare('INSERT INTO orders (user_id, room_no, total_price, order_status) VALUES (:user_id, :room_no, :total_price, :order_status)');
+    $stmt->bindParam(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
+    $stmt->bindParam(':room_no', $roomNo);
+    $stmt->bindParam(':total_price', $totalAmount);
+    $stmt->bindValue(':order_status', 'processing');
+    $stmt->execute();
+
+    // Get the ID of the inserted order
+    $orderId = $pdo->lastInsertId();
+
+    // Insert the order item into the order_items table
+    $stmt = $pdo->prepare('INSERT INTO order_items (order_id, product_id, quantity, notes) VALUES (:order_id, :product_id, :quantity, :notes)');
+    $stmt->bindParam(':order_id', $orderId, PDO::PARAM_INT);
+    $stmt->bindParam(':product_id', $selectedProduct, PDO::PARAM_INT);
+    $stmt->bindParam(':quantity', $quantity, PDO::PARAM_INT);
+    $stmt->bindParam(':notes', $notes);
+    $stmt->execute();
+}
+
+// ...
+
+function get_product_details($productId)
+{
+    $pdo = DataBase::getPDO();
+    $stmt = $pdo->prepare('SELECT * FROM products WHERE id = :product_id');
+    $stmt->bindParam(':product_id', $productId, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
 
 
 // Example function:
 function cancel_order($orderId)
 {
-    // Replace with your database credentials
-    $servername = "localhost";
-    $username = "root";
-    $password = "pass";
-    $dbname = "cafeteriaWebsiteDB";
-
-    try {
-        // Create a new PDO instance
-        $db = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-
-        // Set the PDO error mode to exception
-        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-        // Update the order status to "canceled" in the database
-        $stmt = $db->prepare('UPDATE orders SET order_status = "canceled" WHERE id = :order_id');
-        $stmt->bindParam(':order_id', $orderId);
-        $stmt->execute();
-    } catch (PDOException $e) {
-        // Handle database connection error
-        die("Database error: " . $e->getMessage());
-    }
+    $pdo = DataBase::getPDO();
+    $stmt = $pdo->prepare('UPDATE orders SET order_status = "canceled" WHERE id = :order_id');
+    $stmt->bindParam(':order_id', $orderId, PDO::PARAM_INT);
+    $stmt->execute();
 }

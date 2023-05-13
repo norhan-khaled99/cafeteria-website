@@ -1,13 +1,13 @@
 <?php
 
-$host = 'localhost';
-$username = 'root';
-$password = 'pass';
-$dbname = 'cafeteriaWebsiteDB';
 // $host = 'localhost';
+// $username = 'root';
+// $password = 'Salama@99';
 // $dbname = 'cafeteria_db';
-// $username = 'phpuser';
-// $password = 'Iti123456';
+$host = 'localhost';
+$dbname = 'cafeteria_db';
+$username = 'phpuser';
+$password = 'Iti123456';
 try {
     // $pdo = new PDO("mysql:host=$host;", $username, $password);
     $pdo=new PDO("mysql:host=$host;dbname=$dbname", $username, $password);

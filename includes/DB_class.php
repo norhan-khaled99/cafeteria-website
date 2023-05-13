@@ -12,14 +12,14 @@ class DataBase
     }
     public static function connect()
     {
-        $host = 'localhost';
-        $dbname = 'cafeteriaWebsiteDB';
-        $username = 'root';
-        $password = 'pass';
         // $host = 'localhost';
         // $dbname = 'cafeteria_db';
-        // $username = 'phpuser';
-        // $password = 'Iti123456';
+        // $username = 'root';
+        // $password = 'Salama@99';
+        $host = 'localhost';
+        $dbname = 'cafeteria_db';
+        $username = 'phpuser';
+        $password = 'Iti123456';
 
         try {
             self::$pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $password);

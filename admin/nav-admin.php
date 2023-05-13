@@ -47,7 +47,7 @@ integrity='sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtv
                     <a class="nav-link" href="./admin-order.php">Manual Orders</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="">Checks</a>
+                    <a class="nav-link" href="./checks.php">Checks</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="../logout.php">Log Out</a>

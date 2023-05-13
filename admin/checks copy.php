@@ -34,8 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // Retrieve checks based on date and user selection
 // Call the get_checks() function with the correct PDO instance
-$checks = get_checks($pdo, $dateFrom, $dateTo, $selectedUser);
-
+$checks = get_checks($pdo);
 ?>
 
 <div class="container">
@@ -89,13 +88,13 @@ $checks = get_checks($pdo, $dateFrom, $dateTo, $selectedUser);
                                 <td>
                                     <button class="btn btn-primary view-order-btn" data-check-id="<?php echo $check['id']; ?>" data-toggle="modal" data-target="#orderModal">View Order</button>
                                 </td>
-                        </tr>
+                            </tr>
                         <?php } ?>
                     </tbody>
                 </table>
             <?php } else { ?>
                 <p>No checks found.</p>
-            <?php } ?>
+                <?php } ?>
         </div>
     </div>
 </div>
