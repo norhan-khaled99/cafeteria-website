@@ -1,15 +1,12 @@
 
-
-
 <?php
 include 'includes/DB_class.php';
 require_once('includes/functions.php');
 
 // Create a new PDO instance
-$pdo = DataBase::connect();
-
+$pdo=new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
 // Create the necessary tables
-create_tables($pdo);
+// create_tables($pdo);
 
 if (!is_logged_in()) {
     redirect('login.php');
@@ -19,27 +16,29 @@ include 'nav-user.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Check if the form is submitted
-    if (isset($_POST['submit_order'])) {
+    if (isset($_POST['submit_order']) && isset($_POST['selected_product'])) {
         // Retrieve the form values
-        $selectedProduct = isset($_POST['selected_product']) ? $_POST['selected_product'] : '';
+        $selectedProduct = $_POST['selected_product'];
+ 
+
         $quantity = $_POST['quantity'];
         $roomNo = $_POST['room_no'];
         $notes = $_POST['notes'];
-        $totalAmount = $_POST['total_amount'];
+
+        $the_product=get_product_details($selectedProduct);
+        $the_price=$the_product['price'];
+        $totalAmount=($the_price * $quantity);
 
         // Check if the selected product is not empty
         if (!empty($selectedProduct)) {
             // Save the order in the database using the save_order() function
+             echo $totalAmount; 
             save_order($selectedProduct, $quantity, $roomNo, $notes, $totalAmount);
+            echo "<h4 class='text-success'>saved</h4>";
+        } 
+    }else{
+        echo "<h4 class='text-danger'>Please select a product before placing the order.</h4>";
 
-            // Redirect or display a success message
-            redirect('order-success.php');
-            // Alternatively, you can display a success message here
-            // echo "Order placed successfully.";
-        } else {
-            // Handle the case where the selected product is not provided
-            echo "Please select a product before placing the order.";
-        }
     }
 }
 
@@ -65,7 +64,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     <form action="" method="post">
                                         <div class="form-group">
                                             <label for="selected_product">Selected Product:</label>
-                                            <input type="text" id="selected_product" class="form-control" readonly>
+                                            <!-- <input type="text" id="selected_product" name="selected_product" class="form-control" readonly> -->
+                                           
+                                            <div class="form-group">
+                                            <select class="form-control" id="selected_product" name="selected_product">
+                                                <option selected></option>
+                                           
+                                                  <?php foreach ($products as $product) { ?>
+                                                    <option value="<?php echo $product['id']; ?>"><?php echo $product['name']; ?></option>
+                                                <?php } ?>
+                                            </select>
+                                        </div>
+                              
+
                                             <div class="mb-3">
                                                 <label for="quantity">Quantity:</label>
                                                 <div class="input-group">
@@ -75,20 +86,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                 </div>
                                             </div>
                                             <label for="room_no">Room:</label>
-                                            <select class="form-control w-50" id="room_no" name="room_no" required>
+                                            <!-- <select class="form-control w-50" id="room_no" name="room_no" required>
                                                 <option selected></option>
                                                 <option value='combobox'>Combobox</option>
-                                            </select>
+                                            </select> -->
+                                            <input type="number" id="" name="room_no" class="form-control" >
+
                                             <label for="notes">Notes:</label>
                                             <textarea name="notes" id="notes" class="form-control"></textarea>
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="total_amount">Total Amount:</label>
-                                            <input type="text" id="total_amount" class="form-control" readonly>
-                                            <button type="submit" name="submit_order" class="btn btn-primary">Confirm Order</button>
-                                        </div>
-                                    </form>
+                                            <label type="number" id="total_amount" class="form-control" >
+                                                <button type="submit" name="submit_order" class="btn btn-primary">Confirm Order</button>
+                                            </div>
+                                        </form>
                                 </div>
                             </div>
                             <div class="col-6">
@@ -102,6 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <?php foreach ($products as $product) { ?>
                         <div class="card">
                             <img src="images/<?php echo $product['image_url']; ?>" class="card-img-top w-50" alt="Product Image" onclick="addToCart('<?php echo $product['name']; ?>', '<?php echo $product['price']; ?>')">
+
                             <div class="card-body">
                                 <h5 class="card-title"><?php echo $product['name']; ?></h5>
                                 <p>Price: <?php echo $product['price']; ?></p>
@@ -121,7 +134,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     function addToCart(productName, productPrice) {
        
         document.getElementById('selected_product').value = productName;
-        updateTotalAmount();
+        // updateTotalAmount();
 
         // Increment or decrement quantity
         document.querySelectorAll('.quantity-btn').forEach(function(btn) {
@@ -139,21 +152,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
 
                 quantityInput.value = quantity;
-                updateTotalAmount();
+                // updateTotalAmount();
             });
         });
 
         // Update total amount based on quantity and product price
-        function updateTotalAmount() {
-            var quantity = parseInt(document.getElementById('quantity').value);
-            var price = parseFloat(productPrice);
-            var totalAmount = quantity * price;
+        // function updateTotalAmount() {
+        //     var quantity = parseInt(document.getElementById('quantity').value);
+        //     var price = parseFloat(productPrice);
+        //     var totalAmount = quantity * price;
 
-            document.getElementById('total_amount').value = totalAmount.toFixed(2);
-        }
+        //     document.getElementById('total_amount').value = totalAmount.toFixed(2);
+        // }
     }
 </script>
+<?php
 
+?>
 
 <?php
 include 'includes/footer.php';
