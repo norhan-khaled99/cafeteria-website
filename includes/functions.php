@@ -1,6 +1,4 @@
 <?php
-
-require_once 'config.php';
 require_once 'DB_class.php';
 
 session_start();
@@ -148,14 +146,6 @@ function get_product_by_id($id)
     $stmt->execute();
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
-// function get_user_ext_by_orderId($id)
-// {
-//     $pdo = DataBase::getPDO();
-//     $stmt = $pdo->prepare('SELECT * FROM orders WHERE orders.id=:id and users.id = :id');
-//     $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-//     $stmt->execute();
-//     return $stmt->fetch(PDO::FETCH_ASSOC);
-// }
 
 // Get a user by ID
 function get_user_by_id($id)

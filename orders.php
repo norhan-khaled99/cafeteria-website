@@ -1,7 +1,6 @@
 <?php
-include 'includes/DB_class.php';
-// require_once('includes/config.php');
-require_once('includes/functions.php');
+require('includes/functions.php');
+$pdo = DataBase::getPDO();
 
 if (!is_logged_in()) {
     redirect('login.php');
@@ -13,10 +12,11 @@ include 'nav-user.php';
 <div class="container">
     <h1>My Orders</h1>
 
-    <!-- Display the user's orders -->
     <?php
     $user_id = $_SESSION['user_id'];
+
 $orders = get_orders_by_user($user_id);
+
 
 if (empty($orders)) {
     echo "<p>No orders found.</p>";

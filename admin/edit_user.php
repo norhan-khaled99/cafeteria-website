@@ -1,9 +1,6 @@
 <?php
-include_once('../includes/config.php');
-include_once('../includes/functions.php');
-$pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
-
-// Check if the user is logged in as admin
+require('../includes/functions.php');
+$pdo = DataBase::getPDO();
 if (!is_logged_in()) {
     header('Location: ../login.php');
     exit();
@@ -15,9 +12,7 @@ if (!is_logged_in()) {
 $id = (int)$_GET['id'];
 $user = get_user_by_id($id);
 
-// Check if the form was submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Get the form data
     $name = $_POST['name'];
     $email = $_POST['email'];
     $password = $_POST['password'];
@@ -26,25 +21,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $ext = $_POST['ext'];
     $profile_picture = $_FILES['profile_picture'];
 
-    // Check if all fields are filled in
     if (empty($name) || empty($email) || empty($room_no)) {
         $error_message = 'Please fill in all required fields';
     } else {
-        // Update the user in the database
         $query = "UPDATE users SET name = :name, email = :email, room_no = :room_no, ext = :ext";
 
-        // Update the password if provided
         if (!empty($password) && $password === $confirm_password) {
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
             $query .= ", password = :password";
         }
 
-        // Update the profile picture if provided
         if (!empty($profile_picture['name'])) {
             $upload_dir = '../profile_pictures/';
             $upload_file = $upload_dir . basename($profile_picture['name']);
 
-            // Move the uploaded file to the desired location
             if (move_uploaded_file($profile_picture['tmp_name'], $upload_file)) {
                 $query .= ", profile_picture = :profile_picture";
             }
@@ -76,8 +66,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
-
-// Get the user from the database
 
 
 ?>

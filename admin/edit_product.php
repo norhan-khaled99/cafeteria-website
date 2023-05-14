@@ -1,21 +1,14 @@
 <?php
-require_once('../includes/config.php');
 require_once('../includes/functions.php');
-$pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
+$pdo = DataBase::getPDO();
 
-// Check if the user is logged in and is an admin
-// check_session();
-
-// Check if the form was submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Get the form data
     $id = $_POST['id'];
     $name = $_POST['name'];
     $price = $_POST['price'];
     $category_id = $_POST['category_id'];
     $image = $_FILES['image'];
 
-    // Validate the form data
     $errors = [];
 
     if (empty($name)) {
@@ -35,7 +28,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if (!empty($image['name'])) {
-        // Process the image upload
         $upload_dir = '../product_images/';
         $image_name = basename($image['name']);
         $target_path = $upload_dir . $image_name;
@@ -49,7 +41,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if (empty($errors)) {
             if (move_uploaded_file($image['tmp_name'], $target_path)) {
-                // Image uploaded successfully, update the database
                 $query = "UPDATE products SET name = :name, price = :price, category_id = :category_id, image_url = :image_url WHERE id = :id";
 
                 $stmt = $pdo->prepare($query);
@@ -60,7 +51,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt->bindParam(':id', $id);
 
                 if ($stmt->execute()) {
-                    // Redirect to the products page
                     header('Location: products.php');
                     exit();
                 } else {
@@ -71,7 +61,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
     } else {
-        // No image uploaded, update the database without the image
         $query = "UPDATE products SET name = :name, price = :price, category_id = :category_id WHERE id = :id";
 
         $stmt = $pdo->prepare($query);
@@ -81,7 +70,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bindParam(':id', $id);
 
         if ($stmt->execute()) {
-            // Redirect to the products page
             header('Location: products.php');
             exit();
         } else {
@@ -90,11 +78,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Get the product details from the database
 $id = (int)$_GET['id'];
 $product = get_product_by_id($id);
 
-// Get all categories from the database
 $categories = get_all_categories();
 
 ?>

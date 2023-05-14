@@ -1,6 +1,6 @@
 <?php 
     include('includes/header.php');
-    include('includes/config.php');
+    include('includes/.php');
     include('includes/functions.php');
 
     // Get check ID from URL

@@ -1,9 +1,13 @@
 <?php
-include 'config.php';
 class DataBase
 {
     public static $pdo;
 
+    public  static $host = 'localhost';
+    public static $dbname = 'cafeteria_db';
+    public static $username = 'phpuser';
+    public static  $password = 'Iti123456';
+    
     public function query($sql, $params = [])
     {
         $stmt = $this->pdo->prepare($sql);
@@ -12,17 +16,11 @@ class DataBase
     }
     public static function connect()
     {
-        // $host = 'localhost';
-        // $dbname = 'cafeteria_db';
-        // $username = 'root';
-        // $password = 'Salama@99';
-        $host = 'localhost';
-        $dbname = 'cafeteria_db';
-        $username = 'phpuser';
-        $password = 'Iti123456';
-
+      
+            $the_host= self::$host;
+            $the_dbname= self::$dbname;
         try {
-            self::$pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $password);
+            self::$pdo = new PDO("mysql:host=$the_host;dbname=$the_dbname;charset=utf8mb4", self::$username, self::$password);
             self::$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             self::$pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
         } catch (PDOException $e) {

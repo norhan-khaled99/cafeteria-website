@@ -1,27 +1,17 @@
 <?php
-require_once 'includes/DB_class.php';
-require_once 'includes/functions.php';
+require 'includes/functions.php';
 
 if (!empty($_GET)) {
     $email = $_GET['email'];
-    $user = get_user_by_email($email); // Use the function from functions.php
+    var_dump($email);
+    $user = get_user_by_email($email);
     if ($user) {
-        $token = bin2hex(random_bytes(32)); // Generate a unique token
+        $token = bin2hex(random_bytes(32)); 
 
-        // Store the token, user ID, and expiration date in the database
-        // $host = 'localhost';
-        // $dbname = 'cafeteriaWebsiteDB';
-        // $username = 'root';
-        // $password = 'pass';
-        $host = 'localhost';
-        $dbname = 'cafeteria_db';
-        $username = 'phpuser';
-        $password = 'Iti123456';
+        DataBase::update_user_token($email,$token);
+        echo 'ay btngaaan';
+        // header("Location: login.php");
 
-        $db = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $password);
-        $stmt = $db->prepare("UPDATE users SET reset_token = :token WHERE id = :id");
-        $stmt->execute(array(':token' => $token, ':id' => $user['id']));
-        $result = $stmt->rowCount();
     } else {
         $error = "Invalid email address.";
     }
@@ -36,7 +26,6 @@ echo "<link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/b
         <link rel='stylesheet' href='css/login.css'>
         ";
 ?>
-<!-- Display the form to request a password reset -->
 <div class="container">
     <br>
 
@@ -49,7 +38,8 @@ echo "<link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/b
     <?php } ?>
 
     <div class="container d-flex justify-content-left">
-        <form class="w-50" action="update-password.php?token=<?php echo $token ?>" method="POST">
+    <form class="w-50" action="update-password.php?token=<?php echo $token ?>" method="POST">
+       
         <h1 class="text-light">Hi <?php echo $user['name']?><br>&nbsp; please,reset your password</h1>    
         <label for="email" class="form-label" style="color:wheat;">enter new password</label>
             <input type="password" name="password_new" class="form-control" required>

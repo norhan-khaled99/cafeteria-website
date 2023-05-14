@@ -1,6 +1,5 @@
 <?php
-include 'includes/DB_class.php';
-require_once 'includes/functions.php';
+require_once('includes/functions.php');
 
 if (!empty($_SESSION['user_id'])) {
     header('Location: index.php');

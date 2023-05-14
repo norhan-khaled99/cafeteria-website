@@ -1,16 +1,11 @@
 <?php
-include('../includes/config.php');
-require_once('../includes/functions.php');
-// $pdo = new PDO("mysql:host=$host;", $username, $password);
-// $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
+require('../includes/functions.php');
+$pdo = DataBase::getPDO();
 
-// var_dump(is_admin());
 if (!is_admin()) {
     redirect('index.php');
-    // echo "not admin";
 }
 
-// Get all users
 $query = "SELECT * FROM users";
 $stmt = $pdo->query($query);
 $users = $stmt->fetchAll(PDO::FETCH_ASSOC);

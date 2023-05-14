@@ -1,18 +1,15 @@
-
 <?php
-include 'includes/DB_class.php';
-require_once('includes/functions.php');
-
-// Create a new PDO instance
-$pdo=new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
-// Create the necessary tables
-// create_tables($pdo);
+require('includes/functions.php');
+$pdo = DataBase::getPDO();
 
 if (!is_logged_in()) {
     redirect('login.php');
 }
 
 include 'nav-user.php';
+$user_id = $_SESSION['user_id'];
+
+$user=get_user_by_id($user_id);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Check if the form is submitted
@@ -45,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 
 <div class="container">
-    <h1>Welcome to the Cafeteria</h1>
+    <h1>Welcome to the Cafeteria ya <span class='text-warning fs-1'><?php echo $user['name']; ?></span></h1>
 
     <div class="row">
         <?php

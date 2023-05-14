@@ -1,6 +1,6 @@
 <?php
-// Include config file
-require_once '../includes/config.php';
+// Include  file
+require_once '../includes/.php';
 
 // Check if user is logged in and is an admin
 if (!is_admin()) {

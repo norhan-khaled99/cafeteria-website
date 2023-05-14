@@ -1,6 +1,6 @@
 <?php 
-// Include config file
-require_once '../includes/config.php';
+// Include  file
+require_once '../includes/.php';
 
 // Redirect to login page if not logged in
 if (!is_logged_in()) {

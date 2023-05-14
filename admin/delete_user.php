@@ -1,9 +1,8 @@
 <?php
-include_once('../includes/config.php');
-include_once('../includes/functions.php');
-$pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
+require_once('../includes/functions.php');
+$pdo = DataBase::getPDO();
 
-// Check if the user is logged in as admin
+
 if (!is_logged_in()) {
     header('Location: ../login.php');
     exit();
@@ -12,21 +11,17 @@ if (!is_logged_in()) {
     exit();
 }
 
-// Get the user id from the URL parameter
 $id = (int)$_GET['id'];
 
-// Check if the user exists
 $user = get_user_by_id($id);
 if (empty($user)) {
     echo "User does not exist.";
 } else {
-    // Perform the delete operation
     $query = "DELETE FROM users WHERE id=:id";
     $stmt = $pdo->prepare($query);
     $stmt->bindParam(':id', $id);
     if ($stmt->execute()) {
         echo "User deleted successfully.";
-        // Redirect to the users page after deletion
         header('Location: users.php');
         exit();
     } else {

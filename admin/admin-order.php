@@ -1,10 +1,6 @@
 <?php
-include '../includes/DB_class.php';
 require_once('../includes/functions.php');
-
-// Create a new PDO instance
-$pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
-
+$pdo = DataBase::getPDO();
 // Create the necessary tables
 // create_tables($pdo);
 

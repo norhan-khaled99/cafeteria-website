@@ -1,20 +1,15 @@
 <?php
-require_once('../includes/config.php');
+require ('../includes/DB_class.php');
 require_once('../includes/functions.php');
-$pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
 
-// Check if the user is logged in and is an admin
-// check_session();
+$pdo = DataBase::getPDO();
 
-// Get all products from the database
 $query = "SELECT * FROM products";
 $stmt = $pdo->query($query);
 
-// Check if there are any products
 if ($stmt->rowCount() == 0) {
     $message = "There are no products available.";
 } else {
-    // Display the products in a table
     $table = "<table class='table table-striped'>
                 <thead>
                     <tr>
@@ -32,9 +27,8 @@ if ($stmt->rowCount() == 0) {
         $name = $product['name'];
         $price = $product['price'];
         $category_id = $product['category_id'];
-        $image_filename = basename($product['image_url']); // Get the filename from the image URL
+        $image_filename = basename($product['image_url']);
 
-        // Get the category name
         $query2 = "SELECT * FROM categories WHERE id = :category_id";
         $stmt2 = $pdo->prepare($query2);
         $stmt2->bindParam(':category_id', $category_id);
@@ -42,7 +36,6 @@ if ($stmt->rowCount() == 0) {
         $category = $stmt2->fetch(PDO::FETCH_ASSOC);
         $category_name = $category['name'];
 
-        // Add the product to the table
         $table .= "<tr>
                       <td>$id</td>
                       <td><img src='../product_images/$image_filename' alt='$name' class='product-image'></td>

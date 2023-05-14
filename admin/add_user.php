@@ -1,12 +1,8 @@
 <?php
-include '../includes/config.php';
 require_once('../includes/functions.php');
+$pdo = DataBase::getPDO();
 
-$pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
-
-// Check if form is submitted
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Get the form data
     $name = $_POST['name'];
     $email = $_POST['email'];
     $password = $_POST['password'];
@@ -14,11 +10,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $room_no = $_POST['room_no'];
     $ext = $_POST['ext'];
 
-    // Check if passwords match
     if ($password && $password != $confirm_password) {
         $error = 'Passwords do not match';
     } else {
-        // Check if email already exists
         $query = "SELECT * FROM users WHERE email = :email";
         $stmt = $pdo->prepare($query);
         $stmt->bindValue(':email', $email);
@@ -27,31 +21,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($stmt->rowCount() > 0) {
             $error = 'Email already exists';
         } else {
-            // Hash the password
             $password = password_hash($password, PASSWORD_DEFAULT);
 
-            // Handle profile picture upload
             $profilePicture = $_FILES['profile_picture'];
             $profilePictureName = $profilePicture['name'];
             $profilePictureTmpName = $profilePicture['tmp_name'];
 
-            // Generate a unique filename for the profile picture
             $profilePictureExtension = pathinfo($profilePictureName, PATHINFO_EXTENSION);
             $profilePictureFilename = date('YmdHis') . '.' . $profilePictureExtension;
 
-            // Set the upload directory
             $uploadDir = '../profile_pictures/';
 
-            // Create the directory if it doesn't exist
             if (!is_dir($uploadDir)) {
                 mkdir($uploadDir, 0777, true);
             }
 
-            // Move the uploaded file to the destination folder
             $profilePicturePath = $uploadDir . $profilePictureFilename;
             move_uploaded_file($profilePictureTmpName, $profilePicturePath);
 
-            // Insert the user into the database
             $query = "INSERT INTO users (name, email, password, room_no, ext, profile_picture) VALUES (:name, :email, :password, :room_no, :ext, :profile_picture)";
             $stmt = $pdo->prepare($query);
             $stmt->bindValue(':name', $name);

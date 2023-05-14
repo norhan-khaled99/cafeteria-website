@@ -1,41 +1,33 @@
 <?php
-require_once('../includes/config.php');
+require ('../includes/DB_class.php');
 require_once('../includes/functions.php');
-$pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
+$pdo = DataBase::getPDO();
 
-// Check if the form was submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Get the form data
     $name = $_POST['name'];
     $price = $_POST['price'];
     $category_id = $_POST['category_id'];
 
-    // Process the image file
     $image = $_FILES['image'];
     $image_name = $image['name'];
     $image_tmp_name = $image['tmp_name'];
     $image_error = $image['error'];
 
-    // Validate form data
     if (empty($name) || empty($price) || empty($category_id)) {
         $error_message = 'Please fill in all fields.';
     } elseif ($image_error !== 0) {
         $error_message = 'An error occurred while uploading the image. Please try again.';
     } else {
-        // Create the folder if it doesn't exist
         $upload_dir = '../product_images/';
         if (!is_dir($upload_dir)) {
             mkdir($upload_dir, 0777, true);
         }
 
-        // Generate a unique filename for the image
         $image_extension = pathinfo($image_name, PATHINFO_EXTENSION);
         $image_filename = time() . '_' . uniqid() . '.' . $image_extension;
 
-        // Save the image file to the folder
         $image_path = $upload_dir . $image_filename;
         if (move_uploaded_file($image_tmp_name, $image_path)) {
-            // Save the product details and image URL in the database
             $query = "INSERT INTO products (name, image_url, price, category_id) VALUES (:name, :image_url, :price, :category_id)";
             $stmt = $pdo->prepare($query);
             $stmt->bindValue(':name', $name);
@@ -56,7 +48,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Get the categories from the database
 $query = "SELECT * FROM categories";
 $stmt = $pdo->query($query);
 $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -89,7 +80,7 @@ $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <?php echo $error_message; ?>
             </div>
         <?php } ?>
-
+<a href="./add_category.php">add new category</a>
         <form action="" method="POST" enctype="multipart/form-data">
             <div class="mb-3">
                 <label for="name" class="form-label">Name</label>

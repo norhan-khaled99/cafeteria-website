@@ -1,7 +1,7 @@
 <?php
-include('../includes/config.php');
-require_once('../includes/functions.php');
-$pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
+include('../includes/DB_class.php');
+require('../includes/functions.php');
+$pdo = DataBase::getPDO();
 
 // Check if user is logged in as admin
 if (!is_admin()) {
