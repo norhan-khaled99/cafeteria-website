@@ -39,7 +39,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     <main>
         <div class="container">
-            <h1 class="my-4">Users</h1>
+            <h1 class="my-4 text-center">Users</h1>
             <?php if (count($users) == 0) { ?>
                 <p>There are no users.</p>
             <?php } else { ?>
@@ -77,7 +77,9 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </tbody>
                 </table>
             <?php } ?>
+            <div class="d-flex justify-content-center my-3">
             <a href="add_user.php" class="btn btn-success">Add User</a>
+            </div>
         </div>
     </main>
 

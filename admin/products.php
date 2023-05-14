@@ -85,15 +85,16 @@ if ($stmt->rowCount() == 0) {
 <body>
   <?php include 'nav-admin.php' ?> 
     <div class="container">
-        <h1 class="my-4">Products</h1>
+        <h1 class="my-4 text-center">Products</h1>
 
         <?php if (!empty($message)) { ?>
             <p><?php echo $message; ?></p>
         <?php } else { ?>
             <?php echo $table; ?>
         <?php } ?>
-
-        <a href="add_new_product.php" class="btn btn-success mt-3">Add Product</a>
+         <div class="d-flex justify-content-center">
+        <a href="add_new_product.php" class="btn btn-success mt-3 mx-auto">Add Product</a>
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js"></script>

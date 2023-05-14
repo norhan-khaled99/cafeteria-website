@@ -42,8 +42,7 @@ echo "<link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/b
 ?>
 
 <div class="container">
-    <div id='cafe' class='mt-5 text-left  fw-light' style="color:#f9d4a4e3">Cafeteria
-        <img style='width: 110px;' src='images/coffee-logo.png' alt='logo' />
+    <div id='cafe' class='mt-5 text-left  fw-light ' style="color:#f9d4a4e3; font-family: 'Dancing Script', cursive;">Cafeteria
     </div>
     <br>
 
@@ -53,10 +52,10 @@ echo "<link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/b
 
     <div class='container d-flex justify-content-left'>
         <form class='w-50' action='' method='POST'>
-            <label for='email' class='form-label'>Email</label>
+            <label for='email' class='form-label text-light'>Email</label>
             <input type='email' id='email-input' name='email' class='form-control' required>
             <br>
-            <label for='password' class='form-label'>Password</label>
+            <label for='password' class='form-label text-light'>Password</label>
             <input type='password' name='password' class='form-control' required>
 
             <div class='mt-3 text-center'>
@@ -73,6 +72,3 @@ echo "<link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/b
         window.location.href = 'reset-password.php?email=' + email;
     });
 </script>
-<?php
-include 'includes/footer.php';
-?>

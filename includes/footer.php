@@ -1,10 +1,10 @@
-<footer class="bg-dark text-light mt-auto">
+<footer class="bg-dark text-light mt-auto  mt-5">
     <div class="container py-4">
         <div class="row">
             <div class="col-lg-4">
                 <h5>About Us</h5>
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vulputate scelerisque erat, sit amet
-                    finibus odio convallis vitae.</p>
+                 finibus odio convallis vitae.</p>
             </div>
             <div class="col-lg-4">
                 <h5>Contact Us</h5>

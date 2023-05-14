@@ -6,7 +6,7 @@ require_once('../includes/functions.php');
 $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
 
 // Create the necessary tables
-create_tables($pdo);
+// create_tables($pdo);
 
 // Check if the user is logged in and is an admin
 check_session();
@@ -18,8 +18,8 @@ $users = get_all_users();
 
 ?>
 
-<div class="container">
-    <h1>Place Order for User</h1>
+<div class="container me-5">
+    <p class="fs-1 text-center">Place Order for User</p> 
 
     <div class="row">
         <div class="col-md-8">
@@ -33,14 +33,14 @@ if (count($products) == 0) {
     foreach ($products as $product) {
         ?>
                         <div class="col-md-4 mb-4">
-                            <div class="card product-card" data-product-id="<?php echo $product['id']; ?>">
-                                <img style="width:100px" src="../images/<?php echo $product['image_url']; ?>" class="card-img-top" alt="Product Image">
+                            <div class="card product-card me-5 rounded" data-product-id="<?php echo $product['id']; ?>">
+                                <img class="w-100" src="../images/<?php echo $product['image_url']; ?>" class="card-img-top" alt="Product Image">
                                 <div class="card-body">
-                                    <h5 class="card-title"><?php echo $product['name']; ?></h5>
-                                    <p class="card-text">Price: $<?php echo $product['price']; ?></p>
-                                    <div class="input-group">
+                                    <h5 class="card-title text-center"><?php echo $product['name']; ?></h5>
+                                    <p class="card-text text-center">Price: $<?php echo $product['price']; ?></p>
+                                    <div class="input-group d-flex justify-content-center">
                                         <button type="button" class="btn btn-primary quantity-btn" data-action="decrement">-</button>
-                                        <input type="number" class="form-control quantity-input" value="1" min="1">
+                                        <input type="number" class="form-control quantity-input text-center" value="1" min="1">
                                         <button type="button" class="btn btn-primary quantity-btn" data-action="increment">+</button>
                                     </div>
                                 </div>
@@ -54,7 +54,7 @@ if (count($products) == 0) {
         </div>
         <div class="col-md-4">
             <form action="process_order.php" method="post">
-                <div class="card">
+                <div class="card text-center ">
                     <div class="card-header">Selected Items</div>
                     <div class="card-body" id="selected-items">
                         <p>No items selected.</p>
@@ -69,7 +69,7 @@ if (count($products) == 0) {
                                 <?php } ?>
                             </select>
                         </div>
-                        <button type="button" class="btn btn-primary btn-block" id="confirm-order-btn" disabled>Confirm Order</button>
+                        <button type="button" class="btn btn-primary btn-block my-3" id="confirm-order-btn" disabled>Confirm Order</button>
                     </div>
                 </div>
             </form>
@@ -77,7 +77,7 @@ if (count($products) == 0) {
     </div>
 </div>
 
-<script>
+ <script>
     document.addEventListener('DOMContentLoaded', function () {
         // Add event listeners to product cards
         var productCards = document.querySelectorAll('.product-card');

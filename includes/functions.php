@@ -100,6 +100,12 @@ function get_all_categories()
     $stmt = $pdo->query('SELECT * FROM categories ORDER BY name ASC');
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+function get_all_orders()
+{
+    $pdo = DataBase::getPDO();
+    $stmt = $pdo->query('SELECT * FROM orders ORDER BY order_date ASC');
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 
 // Get orders for a specific user
 function get_user_orders($userId)
@@ -142,6 +148,14 @@ function get_product_by_id($id)
     $stmt->execute();
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
+// function get_user_ext_by_orderId($id)
+// {
+//     $pdo = DataBase::getPDO();
+//     $stmt = $pdo->prepare('SELECT * FROM orders WHERE orders.id=:id and users.id = :id');
+//     $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+//     $stmt->execute();
+//     return $stmt->fetch(PDO::FETCH_ASSOC);
+// }
 
 // Get a user by ID
 function get_user_by_id($id)

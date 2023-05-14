@@ -10,6 +10,14 @@ if (!is_admin()) {
 
 include 'nav-admin.php';
 
+
+$orders=get_all_orders();
+$users=get_all_users();
+
+
+
+
+
 // Get total number of products
 $query1 = "SELECT COUNT(*) as total_products FROM products";
 $stmt1 = $pdo->query($query1);
@@ -37,7 +45,7 @@ $total_orders = $row4['total_orders'];
 ?>
 
 <div class="container">
-    <h1 class="text-center">Admin Dashboard</h1>
+    <h1 class="text-center my-3">Admin Dashboard</h1>
     <hr>
     <div class="row">
         <div class="col-md-3 mb-4">
@@ -83,4 +91,42 @@ $total_orders = $row4['total_orders'];
     </div>
 </div>
 
-<?php include_once '../includes/footer.php'; ?>
+<div class="container">
+    <div class="row">
+        <table class="table">
+          <thead>
+            <th>order date</th>
+            <th>user name</th>
+            <th>room</th>
+            <th>ext</th>
+            <th>action</th>
+          </thead>
+          <tbody>
+            <?php foreach($orders as $order){?>
+            <tr>
+                <td><?php echo $order['order_date'];?> </td>
+
+                <?php foreach($users as $user){
+                     if($user['id']==$order['user_id']){
+                     ?>
+                <td><?php echo $user['name'];?> </td>
+                <?php }} ?>
+
+                <td><?php echo $order['room_no'];?> </td>
+
+                <?php foreach($users as $user){
+                     if($user['id']==$order['user_id']){
+                     ?>
+                <td><?php $user['ext'] ?></td>
+                <?php }} ?>
+
+                <td><?php echo $order['order_status'];?> </td>
+            </tr>
+            <?php } ?>
+          </tbody>
+</table>
+    </div>
+</div>
+<div class="bg-secondary text-center py-2 fixed-bottom">
+        <p class="mb-0">All rights reserved &copy; 2023</p>
+    </div>

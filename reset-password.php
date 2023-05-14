@@ -9,10 +9,15 @@ if (!empty($_GET)) {
         $token = bin2hex(random_bytes(32)); // Generate a unique token
 
         // Store the token, user ID, and expiration date in the database
+        // $host = 'localhost';
+        // $dbname = 'cafeteriaWebsiteDB';
+        // $username = 'root';
+        // $password = 'pass';
         $host = 'localhost';
-        $dbname = 'cafeteriaWebsiteDB';
-        $username = 'root';
-        $password = 'pass';
+        $dbname = 'cafeteria_db';
+        $username = 'phpuser';
+        $password = 'Iti123456';
+
         $db = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $password);
         $stmt = $db->prepare("UPDATE users SET reset_token = :token WHERE id = :id");
         $stmt->execute(array(':token' => $token, ':id' => $user['id']));
@@ -33,9 +38,6 @@ echo "<link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/b
 ?>
 <!-- Display the form to request a password reset -->
 <div class="container">
-    <div id="cafe" class="mt-5 text-left fw-light" style="color:#f9d4a4e3">Cafeteria
-        <img style="width: 110px;" src="images/coffee-logo.png" alt="logo" />
-    </div>
     <br>
 
     <?php if (!empty($error)) { ?>
@@ -48,13 +50,12 @@ echo "<link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/b
 
     <div class="container d-flex justify-content-left">
         <form class="w-50" action="update-password.php?token=<?php echo $token ?>" method="POST">
-            <label for="email" class="form-label">Email</label>
-            <input type="password" name="password" class="form-control" required>
-
+        <h1 class="text-light">Hi <?php echo $user['name']?><br>&nbsp; please,reset your password</h1>    
+        <label for="email" class="form-label" style="color:wheat;">enter new password</label>
+            <input type="password" name="password_new" class="form-control" required>
             <div class="mt-3 text-center">
                 <button type="submit" class="btn text-center mb-3 wheat">Reset password</button>
             </div>
         </form>
     </div>
 </div>
-<?php include 'includes/footer.php'; ?>

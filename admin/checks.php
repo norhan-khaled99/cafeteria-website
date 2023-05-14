@@ -39,10 +39,10 @@ $checks = get_checks($pdo, $dateFrom, $dateTo, $selectedUser);
 ?>
 
 <div class="container">
-    <h1>Checks</h1>
+    <h1 class="text-center my-2">Checks</h1>
 
     <!-- Date Selection -->
-    <div class="row">
+    <div class="row d-flex justify-content-center">
         <div class="col-md-6">
             <form method="POST">
                 <div class="form-group">
@@ -62,7 +62,9 @@ $checks = get_checks($pdo, $dateFrom, $dateTo, $selectedUser);
                         <?php } ?>
                     </select>
                 </div>
+                <div class="d-flex justify-content-center my-1">
                 <button type="submit" class="btn btn-primary">Filter</button>
+                </div>
             </form>
         </div>
     </div>
